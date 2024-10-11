@@ -33,23 +33,10 @@ jobs:
         with:
           go-version-file: ./go.mod
 
-      - name: Checkout v2fly/domain-list-community
-        if: ${{ env.NeedToSync }}
-        uses: actions/checkout@v4
-        with:
-          repository: v2fly/domain-list-community
-          path: domain-list-community
-
-      - name: Append attribute rules
-        if: ${{ env.NeedToSync }}
-        run: |
-          echo "include:geolocation-!cn @cn" >> ./domain-list-community/data/cn
-          echo "include:geolocation-cn @!cn" >> ./domain-list-community/data/geolocation-\!cn
-
       - name: Get dependencies and run
         if: ${{ env.NeedToSync }}
         run: |
-          go run ./ --datapath=./domain-list-community/data
+          go run ./
 
       - name: Generate sha256 hashsum
         if: ${{ env.NeedToSync }}
