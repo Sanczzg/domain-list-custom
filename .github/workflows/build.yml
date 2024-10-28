@@ -12,40 +12,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Compare latest tags and set variables
+      - name: Get current time and set it as release and tag name
         run: |
-          upstreamLatestTag=$(curl -sSL --connect-timeout 5 --retry 5 -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/v2fly/domain-list-community/releases/latest | grep "tag_name" | cut -d\" -f4)
-          thisLatestTag=$(curl -sSL --connect-timeout 5 --retry 5 -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${{ github.repository }}/releases/latest | grep "tag_name" | cut -d\" -f4)
-          if [[ $upstreamLatestTag != $thisLatestTag ]]; then
-            echo "NeedToSync=true" >> $GITHUB_ENV
-          fi
-          echo "RELEASE_NAME=$upstreamLatestTag" >> $GITHUB_ENV
-          echo "TAG_NAME=$upstreamLatestTag" >> $GITHUB_ENV
+          TIME="$(TZ='Asia/Shanghai' date +'%Y-%m-%d %H:%M:%S')"
+          echo "RELEASE_NAME=$TIME" >> $GITHUB_ENV
+          echo "TAG_NAME=$TIME" >> $GITHUB_ENV
         shell: bash
 
       - name: Checkout codebase
         uses: actions/checkout@v4
-        if: ${{ env.NeedToSync }}
 
       - name: Setup Go
         uses: actions/setup-go@v5
-        if: ${{ env.NeedToSync }}
         with:
           go-version-file: ./go.mod
 
       - name: Get dependencies and run
-        if: ${{ env.NeedToSync }}
         run: |
           go run ./
 
       - name: Generate sha256 hashsum
-        if: ${{ env.NeedToSync }}
         run: |
           cd publish || exit 1
           sha256sum geosite.dat > geosite.dat.sha256sum
 
       - name: Git push assets to "release" branch
-        if: ${{ env.NeedToSync }}
         run: |
           cd publish || exit 1
           git init
@@ -58,7 +49,6 @@ jobs:
           git push -f publish release
 
       - name: Release and upload assets
-        if: ${{ env.NeedToSync }}
         uses: softprops/action-gh-release@v2
         with:
           name: ${{ env.RELEASE_NAME }}
