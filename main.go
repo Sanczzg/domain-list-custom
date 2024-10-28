@@ -1,12 +1,10 @@
 package main
 
 import (
-	"encoding/base64"
 	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"google.golang.org/protobuf/proto"
 )
