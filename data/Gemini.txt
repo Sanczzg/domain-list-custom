@@ -1,0 +1,13 @@
+full:ai.google.dev
+full:alkalimakersuite-pa.clients6.google.com
+full:makersuite.google.com
+bard.google.com
+deepmind.com
+deepmind.google
+gemini.google.com
+generativeai.google
+proactivebackend-pa.googleapis.com
+apis.google.com
+keyword:colab
+keyword:developerprofiles
+keyword:generativelanguage
