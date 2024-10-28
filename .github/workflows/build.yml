@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Get current time and set it as release and tag name
         run: |
-          TIME="$(TZ='Asia/Shanghai' date +'%Y-%m-%d %H:%M:%S')"
+          TIME="$(TZ='Asia/Shanghai' date +'%Y-%m-%d-%H:%M:%S')"
           echo "RELEASE_NAME=$TIME" >> $GITHUB_ENV
           echo "TAG_NAME=$TIME" >> $GITHUB_ENV
         shell: bash
