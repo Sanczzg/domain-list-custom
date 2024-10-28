@@ -44,8 +44,11 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Read rules
+	RulesInFile := make(map[fileName]map[attribute]bool)
+
 	// Generate dlc.dat
-	if geositeList := listInfoMap.ToProto(excludeAttrsInFile); geositeList != nil {
+	if geositeList := listInfoMap.ToProto(RulesInFile); geositeList != nil {
 		protoBytes, err := proto.Marshal(geositeList)
 		if err != nil {
 			fmt.Println("Failed:", err)
